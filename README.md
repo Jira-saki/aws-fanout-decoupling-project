@@ -94,4 +94,11 @@ SQS: Delete the ShippingQueue and ShippingQueueDLQ.
 
 SNS: Delete the NewOrderEvents Topic.
 
+## 🌐 Language Versions
+
+- [🇺🇸 English Version](README.md) (this file)
+- [🇹🇭 Thai Version](README_TH.md)
+
+---
+
 Created for AWS Cloud Engineer Journey 🚀
