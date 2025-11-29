@@ -6,26 +6,21 @@ This project demonstrates the use of the Fan-out Pattern and Decoupling to build
 
 🏗️ Architecture Diagram
 
-The system operates on an Event-Driven model: immediately upon an order file being uploaded to S3, the system distributes tasks (Fan-out) to various queues for asynchronous processing.
+<div align="center">
+  <img src="img/amz-order-fanout-decoupling.png" alt="Black Friday Orders Architecture" width="800"/>
+</div>
 
-graph TD
-    User((User)) -->|1. Upload Invoice| S3[("Amazon S3\n(Invoices Bucket)")]
+### Architecture Flow:
 
-    S3 -->|2. Trigger Event| SNS[("Amazon SNS Topic\n(NewOrderEvents)")]
-    
-    subgraph "Fan-out Pattern"
-    SNS -->|Push| SQS_Ship[("AWS SQS\n(ShippingQueue)")]
-    SNS -->|Push| SQS_Analytics[("AWS SQS\n(AnalyticsQueue)")]
-    end
-    
-    subgraph "Fault Tolerance"
-    SQS_Ship -.->|Failed 3x| DLQ[("Dead Letter Queue\n(ShippingDLQ)")]
-    end
+1. **App uploads 10,000 orders** → S3 (orders invoices)
+2. **S3 event notification (ObjectCreated)** → SNS Topics (New Order Events)
+3. **SNS fan-out** to multiple SQS Queues:
+   - **Fulfillment/Shipping Queue** → Lambda + ECS → RDS (Shipping DB, Inventory)
+   - **Analytics/Marketing Queue** → Lambda + ECS → Redshift (Sales reports, trends)
+4. **Error Handling**: Dead Letter Queue for messages that fail 3x retry
+5. **Monitoring**: CloudWatch for CPU, queues, DB metrics
 
-    style S3 fill:#2ecc71,stroke:#333,stroke-width:2px
-    style SNS fill:#e67e22,stroke:#333,stroke-width:2px
-    style SQS_Ship fill:#9b59b6,stroke:#333,stroke-width:2px
-    style DLQ fill:#e74c3c,stroke:#333,stroke-width:2px
+The system operates on an **Event-Driven model**: immediately upon an order file being uploaded to S3, the system distributes tasks (Fan-out) to various queues for asynchronous processing.
 
 🚀 Key Features
 
@@ -65,7 +60,7 @@ pip install boto3
 
 Run the main script to create the S3 Bucket, SNS Topic, SQS Queue, and attach all necessary Policies.
 
-python 1_setup_infra.py
+python setup_infra.py
 
 Output: You will receive the SQS Queue URL and the S3 Bucket name ready for use.
 
@@ -83,7 +78,7 @@ You will see a new message arrive! (The content will be the Event notification f
 
 📂 Project Structure
 
-1_setup_infra.py: The main script for provisioning AWS Resources and configuring Permissions (Policies).
+setup_infra.py: The main script for provisioning AWS Resources and configuring Permissions (Policies).
 
 (Optional) producer.py: Script to simulate uploading files to S3.
 
