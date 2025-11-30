@@ -1,4 +1,4 @@
-🛍️ Black Friday Order Processing System
+## 🛍️ Black Friday Order Processing System 
 
 A high-scale order processing system simulation for Black Friday events using AWS Serverless Architecture.
 
@@ -10,7 +10,7 @@ This project demonstrates the use of the Fan-out Pattern and Decoupling to build
 <img src="img/amz-order-fanout-decoupling.png" alt="Black Friday Orders Architecture" width="800"/>
 </div>
 
-Architecture Flow:
+### Architecture Flow:
 
 App uploads 10,000 orders → S3 (orders invoices)
 
@@ -28,7 +28,7 @@ Monitoring: CloudWatch for CPU, queues, DB metrics
 
 The system operates on an Event-Driven model: immediately upon an order file being uploaded to S3, the system distributes tasks (Fan-out) to various queues for asynchronous processing.
 
-🚀 Key Features
+### 🚀 Key Features
 
 Fan-out Pattern: Utilizing SNS to broadcast a single dataset to multiple destinations (SQS) simultaneously.
 
@@ -38,11 +38,11 @@ Fault Tolerance: Configuring Dead Letter Queues (DLQ) and Redrive Policies to ca
 
 Infrastructure as Code (IaC): Leveraging Boto3 to provision the entire infrastructure using Python scripts.
 
-📋 Prerequisites
+### 📋 Prerequisites
 
-Python 3.x
+1. Python 3.x
 
-AWS CLI (Installed and Configured)
+2. AWS CLI (Installed and Configured)
 
 ```bash
 aws configure
@@ -50,15 +50,15 @@ aws configure
 ```
 
 
-IAM Permissions: The user running the script must have the following permissions:
+3. IAM Permissions: The user running the script must have the following permissions:
 
-AmazonS3FullAccess
+- AmazonS3FullAccess
 
-AmazonSNSFullAccess
+- AmazonSNSFullAccess
 
-AmazonSQSFullAccess
+- AmazonSQSFullAccess
 
-🛠️ How to Run
+### 🛠️ How to Run
 
 1. Install Dependencies
 ```bash
@@ -77,17 +77,17 @@ Output: You will receive the SQS Queue URL and the S3 Bucket name ready for use.
 
 3. Test the System
 
-Go to the AWS Console and navigate to S3.
+- Go to the AWS Console and navigate to S3.
 
-Upload any file (e.g., test.json) to the bucket black-friday-orders-2025-xx.
+- Upload any file (e.g., test.json) to the bucket black-friday-orders-2025-xx.
 
-Navigate to the SQS Console and check ShippingQueue.
+- Navigate to the SQS Console and check ShippingQueue.
 
-Click Send and receive messages -> Poll for messages.
+- Click Send and receive messages -> Poll for messages.
 
 You will see a new message arrive! (The content will be the Event notification from S3).
 
-📂 Project Structure
+### 📂 Project Structure
 
 setup_infra.py: The main script for provisioning AWS Resources and configuring Permissions (Policies).
 
@@ -95,7 +95,7 @@ setup_infra.py: The main script for provisioning AWS Resources and configuring P
 
 (Optional) consumer.py: Script to simulate a Worker polling tasks from SQS.
 
-🧹 Cleanup
+### 🧹Cleanup
 
 To avoid unexpected charges, remember to remove resources after testing:
 
