@@ -7,20 +7,26 @@ This project demonstrates the use of the Fan-out Pattern and Decoupling to build
 🏗️ Architecture Diagram
 
 <div align="center">
-  <img src="img/amz-order-fanout-decoupling.png" alt="Black Friday Orders Architecture" width="800"/>
+<img src="img/amz-order-fanout-decoupling.png" alt="Black Friday Orders Architecture" width="800"/>
 </div>
 
-### Architecture Flow:
+Architecture Flow:
 
-1. **App uploads 10,000 orders** → S3 (orders invoices)
-2. **S3 event notification (ObjectCreated)** → SNS Topics (New Order Events)
-3. **SNS fan-out** to multiple SQS Queues:
-   - **Fulfillment/Shipping Queue** → Lambda + ECS → RDS (Shipping DB, Inventory)
-   - **Analytics/Marketing Queue** → Lambda + ECS → Redshift (Sales reports, trends)
-4. **Error Handling**: Dead Letter Queue for messages that fail 3x retry
-5. **Monitoring**: CloudWatch for CPU, queues, DB metrics
+App uploads 10,000 orders → S3 (orders invoices)
 
-The system operates on an **Event-Driven model**: immediately upon an order file being uploaded to S3, the system distributes tasks (Fan-out) to various queues for asynchronous processing.
+S3 event notification (ObjectCreated) → SNS Topics (New Order Events)
+
+SNS fan-out to multiple SQS Queues:
+
+Fulfillment/Shipping Queue → Lambda + ECS → RDS (Shipping DB, Inventory)
+
+Analytics/Marketing Queue → Lambda + ECS → Redshift (Sales reports, trends)
+
+Error Handling: Dead Letter Queue for messages that fail 3x retry
+
+Monitoring: CloudWatch for CPU, queues, DB metrics
+
+The system operates on an Event-Driven model: immediately upon an order file being uploaded to S3, the system distributes tasks (Fan-out) to various queues for asynchronous processing.
 
 🚀 Key Features
 
@@ -38,9 +44,11 @@ Python 3.x
 
 AWS CLI (Installed and Configured)
 
+```bash
 aws configure
-
 # Input your Access Key / Secret Key / Region (us-east-1 recommended)
+```
+
 
 IAM Permissions: The user running the script must have the following permissions:
 
@@ -53,14 +61,17 @@ AmazonSQSFullAccess
 🛠️ How to Run
 
 1. Install Dependencies
-
+```bash
 pip install boto3
+```
 
 2. Provision Infrastructure
 
 Run the main script to create the S3 Bucket, SNS Topic, SQS Queue, and attach all necessary Policies.
 
+```bash
 python setup_infra.py
+```
 
 Output: You will receive the SQS Queue URL and the S3 Bucket name ready for use.
 
@@ -94,11 +105,10 @@ SQS: Delete the ShippingQueue and ShippingQueueDLQ.
 
 SNS: Delete the NewOrderEvents Topic.
 
-## 🌐 Language Versions
+🌐 Language Versions
 
-- [🇺🇸 English Version](README.md) (this file)
-- [🇹🇭 Thai Version](README_TH.md)
+🇺🇸 English Version
 
----
+🇹🇭 Thai Version
 
 Created for AWS Cloud Engineer Journey 🚀
